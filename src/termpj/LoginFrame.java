@@ -3,10 +3,6 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
-import termpj.movie_poster_display;
-import termpj.moviechoiceFrame;
-
-import java.util.Random;
 
 public class LoginFrame extends JFrame{
 	Font f;
@@ -17,7 +13,7 @@ public class LoginFrame extends JFrame{
 		setTitle("·Î±×ÀÎ");
 		setResizable(false); // Å©±â ÀçÁ¶Á¤ Çã¿ë
 		setLocationRelativeTo(null); //Ã¢ÀÌ °¡¿îµ¥·Î
-		setLayout(null);
+		getContentPane().setLayout(null);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //x´©¸£¸é Ã¢ Á¾·á
 		
 		JLabel lb1 = new JLabel();        //·¹ÀÌºí ¸¸µé±â    
@@ -32,7 +28,7 @@ public class LoginFrame extends JFrame{
 		tf1.setBounds(100,50, 100,30);
 		tf1.setFont(f);
 		
-		JLabel lb3=new JLabel("ºñ¹Ð¹øÈ£:");    
+		JLabel lb3=new JLabel("password");    
 		lb3.setBounds(20,100, 80,30);
 		lb3.setFont(f);
 		
@@ -40,33 +36,44 @@ public class LoginFrame extends JFrame{
 		pw1.setBounds(100,100,100,30);
 		pw1.setFont(f);
 		
-		JButton Login_bt = new JButton("·Î±×ÀÎ");    
-		Login_bt.setBounds(100,150, 80,30);    
+		JButton Login_bt = new JButton("sign in");    
+		Login_bt.setBounds(170,149, 80,30);    
 		Login_bt.setFont(f);
 		
-		add(lb1);add(pw1);
-		add(lb2);add(tf1);
-		add(lb3);add(Login_bt);
+		getContentPane().add(lb1);
+		getContentPane().add(pw1);
+		getContentPane().add(lb2);
+		getContentPane().add(tf1);
+		getContentPane().add(lb3);
+		getContentPane().add(Login_bt);
+		JButton signupbutton = new JButton("sign up");
+		signupbutton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				new termpj.signupFrame();
+				setVisible(false);
+				}
+			});
+		signupbutton.setBounds(45, 149, 80, 30);
+		getContentPane().add(signupbutton);
 		
-		setSize(320,320);
-		setVisible(true);
 		
 		Login_bt.addActionListener(new ActionListener() {     //·Î±×ÀÎ ¹öÆ° ´­·¶À»¶§ À©µµ¿ì ¾Æ·¡¿¡ ID¿Í ºñ¹Ð¹øÈ£ Ãâ·ÂÇÏ°Ô ±â´É
 			public void actionPerformed(ActionEvent e) {       // ÃßÈÄ ¼öÁ¤À¸·Î ¾Èº¸ÀÌ°Ô ÇÒ ¼ö ÀÖÀ½.
-				/*String data = "Username " + tf1.getText();  	// ¸ÂÀ¸¸é ´ÙÀ½ À©µµ¿ì·Î ³Ñ±â°í Æ²¸®¸é ´Ù½ÃÇÏ¶ó´Â ±â´É Ãß°¡ ¿¹Á¤
+				String data = "Username " + tf1.getText();  	// ¸ÂÀ¸¸é ´ÙÀ½ À©µµ¿ì·Î ³Ñ±â°í Æ²¸®¸é ´Ù½ÃÇÏ¶ó´Â ±â´É Ãß°¡ ¿¹Á¤
 				data += ", Password: "  						 
 						+ new String(pw1.getPassword());   
 				lb1.setText(data);          
-             */
+             
 				String id = tf1.getText().trim();
-				String secret_word= pw1.getText().trim();
+				@SuppressWarnings("deprecation")
+				String secret_word = pw1.getText().trim();
 				//System.out.print(tf1.getText());
 				//System.out.print(new String(secret_word));
 				if(id.length()==0 || secret_word.length()==0) {
 					lb1.setText("¾ÆÀÌµð³ª ÆÐ½º¿öµå¸¦ ÀÔ·ÂÇÏÁö ¾Ê¾Ò½À´Ï´Ù.");
 				}
 				if(id.matches(".*[¤¡-¤¾¤¿-¤Ó°¡-ÆR]+.*")) {
-					lb1.setText("¾ÆÀÌµð ¹× ÆÐ½º¿öµå´Â ¿µ¹®ÀÚ¿Í ¼ýÀÚ·Î ±¸¼ºµË´Ï´Ù.")
+					lb1.setText("¾ÆÀÌµð ¹× ºñ¹Ð¹øÈ£´Â ¿µ¹®ÀÚ¿Í ¼ýÀÚ·Î ±¸¼ºµË´Ï´Ù");
 				}
 				if(id.equals("park") && secret_word.equals("123")) {
 					new termpj.moviechoiceFrame();
@@ -76,5 +83,7 @@ public class LoginFrame extends JFrame{
 					}
              }  
           ); 
+		setSize(320,320);
+		setVisible(true);
 	}
 }
