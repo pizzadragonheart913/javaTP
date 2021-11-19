@@ -65,6 +65,9 @@ public class LoginFrame extends JFrame{
 				if(id.length()==0 || secret_word.length()==0) {
 					lb1.setText("¾ÆÀÌµð³ª ÆÐ½º¿öµå¸¦ ÀÔ·ÂÇÏÁö ¾Ê¾Ò½À´Ï´Ù.");
 				}
+				if(id.matches(".*[¤¡-¤¾¤¿-¤Ó°¡-ÆR]+.*")) {
+					lb1.setText("¾ÆÀÌµð ¹× ÆÐ½º¿öµå´Â ¿µ¹®ÀÚ¿Í ¼ýÀÚ·Î ±¸¼ºµË´Ï´Ù.")
+				}
 				if(id.equals("park") && secret_word.equals("123")) {
 					new termpj.moviechoiceFrame();
 					setVisible(false);
