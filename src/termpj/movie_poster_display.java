@@ -15,7 +15,7 @@ public class movie_poster_display extends JFrame{
 		
 		contentPane = (JPanel) getContentPane();
 		contentPane.setLayout(null);	
-		imageLabel.setIcon(new ImageIcon("E:\\TP\\termpj\\movieposter.gif"));
+		imageLabel.setIcon(new ImageIcon("movieposter.gif"));
 		getContentPane().add(imageLabel);
 		imageLabel.setBounds(0, 0, 344, 500);
 		contentPane.add(imageLabel);

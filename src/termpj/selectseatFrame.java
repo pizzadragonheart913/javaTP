@@ -19,16 +19,19 @@ import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableModel;
 
 
+
 public class selectseatFrame extends JFrame {
 
 	private JPanel contentPane;
 	public ArrayList<String> seatlist = new ArrayList<String>();
 	private JTable table;
-	private JButton btnNewButton;
+	private JButton clearseatbtn;
 	public String str = "";
 	public String seatdata;
 	public moviechoiceFrame mcf;
 	public int clickflag = 0;
+	private JButton tosnackorder;
+	public int reservedpeople;
 	/**
 	 * Launch the application.
 	 */
@@ -49,7 +52,8 @@ public class selectseatFrame extends JFrame {
 	 * Create the frame.
 	 */
 	public selectseatFrame() {
-		moviechoiceFrame mcFrame = new moviechoiceFrame();
+		reservedpeople = moviechoiceFrame.tosspeople();
+		System.out.println(reservedpeople);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 595, 547);
 		contentPane = new JPanel();
@@ -124,17 +128,37 @@ public class selectseatFrame extends JFrame {
 		table.setBounds(22, 70, 396, 300);
 		contentPane.add(table);
 		
-		btnNewButton = new JButton("선택 초기화");
-		btnNewButton.addActionListener(new ActionListener() {
+		clearseatbtn = new JButton("선택 초기화");
+		clearseatbtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				seatlist.clear();
 				str = "";
 				selectedseat.setText(str);
 			}
 		});
-		btnNewButton.setBounds(360, 427, 97, 23);
-		contentPane.add(btnNewButton);
+		clearseatbtn.setBounds(430, 70, 137, 136);
+		contentPane.add(clearseatbtn);
+		
+		tosnackorder = new JButton("\uAC04\uC2DD\uC0AC\uB7EC\uAC00\uAE30");
+		tosnackorder.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(seatlist.size() > reservedpeople) {
+					seatlist.clear();
+					selectedseat.setText("인원보다 많은 좌석선택, 초기화 후 다시 진행해주세요");
+				}
+				else if(seatlist.size() == reservedpeople) {
+					new termpj.snackorderFrame();
+					setVisible(false);
+				}
+				else {
+					
+				}
+			}
+		});
+		tosnackorder.setBounds(430, 227, 137, 143);
+		contentPane.add(tosnackorder);
 		setVisible(true);
+
 	}
 
 }

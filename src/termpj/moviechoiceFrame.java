@@ -13,7 +13,9 @@ import com.toedter.calendar.JDateChooser;
 import java.beans.PropertyChangeListener;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Locale;
 import java.beans.PropertyChangeEvent;
+import java.time.LocalDate;
 
 public class moviechoiceFrame extends JFrame implements ListSelectionListener{
 	/**
@@ -37,11 +39,12 @@ public class moviechoiceFrame extends JFrame implements ListSelectionListener{
 	private String fee;
 	public String teenagersnum;
 	public String adultsnum;
-	public int people;
+	public int intadult;
+	public int intteenager;
+	public static int people;
+	public static int ticketedadult;
 	
-	public int getpeople() {
-		return people;
-	}
+	
 	
 	public moviechoiceFrame() {
 		setSize(1000,700);
@@ -85,8 +88,7 @@ public class moviechoiceFrame extends JFrame implements ListSelectionListener{
 		adults.setBounds(99, 368, 116, 21);
 		panel.add(adults);
 		adults.setColumns(10);
-		String adult = adults.getText(); 
-		
+
 		
 		JLabel lblNewLabel_1 = new JLabel("\uC131\uC778");
 		lblNewLabel_1.setBounds(50, 371, 57, 15);
@@ -96,19 +98,24 @@ public class moviechoiceFrame extends JFrame implements ListSelectionListener{
 		teenagers.setColumns(10);
 		teenagers.setBounds(99, 428, 116, 21);
 		panel.add(teenagers);
+
 		
 		//int adultfee = 10000;
 		//int teenfee = 8000;
 		
-		//totalfee = adultfee * Integer.parseInt(adult)+ teenfee * Integer.parseInt(teenager);
+		
 		//fee = String.valueOf(totalfee);
 		JLabel lblNewLabel_1_1 = new JLabel("\uCCAD\uC18C\uB144");
 		lblNewLabel_1_1.setBounds(50, 431, 57, 15);
 		panel.add(lblNewLabel_1_1);
 			
 		JLabel check_label = new JLabel("");
-		check_label.setBounds(50, 527, 529, 61);
+		check_label.setBounds(50, 527, 505, 21);
 		panel.add(check_label);
+		
+		JLabel check_label_1 = new JLabel("");
+		check_label_1.setBounds(50, 558, 505, 21);
+		panel.add(check_label_1);
 		
 		JButton check_bt = new JButton("\uC608\uB9E4 \uD655\uC778");
 		setVisible(true);
@@ -116,15 +123,18 @@ public class moviechoiceFrame extends JFrame implements ListSelectionListener{
 			public void actionPerformed(ActionEvent e) {
 				adultsnum = adults.getText();
 				teenagersnum = teenagers.getText();
-				people = Integer.parseInt(adultsnum + teenagersnum);
+				int intadult = Integer.parseInt(adultsnum);
+				int intteenager = Integer.parseInt(teenagersnum);
+				people = intteenager + intadult;
+				ticketedadult = intadult;
 				
 				check_label.setText("영화 : " + movieName + ", 극장 : " + theaterName
-						+ ", 날짜 : " + Date
-						+ ", 상영 시간 :" + timeName
-						+" 성인 : " + adultsnum
-						+ ", 청소년 : " + teenagersnum
+						+ ", 날짜 : " + Date);
 						//reservation_data += ", 총 금액: " + fee
-						);
+				check_label_1.setText(", 상영 시간 :" + timeName
+						+" 성인 : " + adultsnum
+						+ ", 청소년 : " + teenagersnum);
+					
 			}
 		});
 		check_bt.setBounds(605, 454, 97, 23);
@@ -133,7 +143,8 @@ public class moviechoiceFrame extends JFrame implements ListSelectionListener{
 		JDateChooser dateChooser = new JDateChooser();
 		dateChooser.setBounds(642, 79, 191, 40);
 		panel.add(dateChooser);
-		String pattern = "dd-MM-yyyy";
+		String Today;
+		String pattern = "yyyyMMdd";
 		DateFormat dateFormat = new SimpleDateFormat(pattern);
 		dateChooser.addPropertyChangeListener(new PropertyChangeListener()
 	    {
@@ -147,7 +158,6 @@ public class moviechoiceFrame extends JFrame implements ListSelectionListener{
 	      }
 	    });
 		
-
 		
 		JLabel lblNewLabel_2 = new JLabel("\uB0A0\uC9DC\uC120\uD0DD");
 		lblNewLabel_2.setBounds(454, 79, 101, 40);
@@ -157,12 +167,36 @@ public class moviechoiceFrame extends JFrame implements ListSelectionListener{
 		JButton moviesubmitbutton = new JButton("좌석 선택하기");
 		moviesubmitbutton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				new termpj.selectseatFrame();
-				setVisible(false);
+				
+				adultsnum = adults.getText();
+				teenagersnum = teenagers.getText();
+				int intadult = Integer.parseInt(adultsnum);
+				int intteenager = Integer.parseInt(teenagersnum);
+				people = intteenager + intadult;
+				int reservedate = Integer.parseInt(Date);
+				int today = Integer.parseInt(dateFormat.format(System.currentTimeMillis()));
+				
+				if(movieName.length() == 0 || theaterName.length() == 0 || Date.length() == 0 
+					|| timeName.length() == 0 || adultsnum.length() == 0 || teenagersnum.length() == 0) {
+					check_label.setText("빈칸이 있습니다");
+				}
+				else if(today > reservedate) {
+					check_label.setText("날짜를 다시 확인하세요.");
+				}
+				else if(intteenager <= 0 && intadult <= 0) {
+					check_label.setText("인원수를 다시 확인하세요.");
+				}
+				else{
+					
+					new termpj.selectseatFrame();
+					setVisible(false);
+				}
+				
 			}
 		});
 		moviesubmitbutton.setBounds(764, 454, 97, 23);
 		panel.add(moviesubmitbutton);
+		
 
 	}
 	
@@ -172,6 +206,17 @@ public class moviechoiceFrame extends JFrame implements ListSelectionListener{
 		movieName = (String) movieList.getSelectedValue();
 		theaterName = (String) theaterList.getSelectedValue();
 		timeName = (String) timeList.getSelectedValue();
+	}
+	
+	public static int tosspeople() {
+		// TODO Auto-generated method stub
+		return people;
+	}
+
+
+	public static int tossadult() {
+		// TODO Auto-generated method stub
+		return ticketedadult;
 	}
 
 }
