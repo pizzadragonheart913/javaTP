@@ -20,18 +20,21 @@ import javax.swing.JList;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.JButton;
+import javax.swing.*;
+
+import dao.ManagementDAO;
+import dto.ManagementDTO;
 
 public class signupFrame extends JFrame {
 
 	private JPanel contentPane;
 	private JTextField signupidtext;
 	private JTextField signupnametext;
-	private JTextField signupbirthtext;
 	private JTextField signuppwtext;
 	private JTextField signupphonetext;
 	private JTextField signupemailtext;
 	private JLabel signupmessagelabel;
-
+	private JRadioButton rMan, rWoman;
 	/**
 	 * Launch the application.
 	 */
@@ -72,10 +75,6 @@ public class signupFrame extends JFrame {
 		signupnamelabel.setBounds(22, 106, 57, 15);
 		contentPane.add(signupnamelabel);
 		
-		JLabel signupbirthlable = new JLabel("\uC0DD\uB144\uC6D4\uC77C(8\uAE00\uC790)");
-		signupbirthlable.setBounds(22, 167, 88, 15);
-		contentPane.add(signupbirthlable);
-		
 		JLabel signupphonelable = new JLabel("\uD734\uB300\uD3F0 \uBC88\uD638 (-\uC81C\uC678)");
 		signupphonelable.setBounds(297, 109, 116, 15);
 		contentPane.add(signupphonelable);
@@ -90,17 +89,12 @@ public class signupFrame extends JFrame {
 		signupnametext.setBounds(138, 103, 116, 21);
 		contentPane.add(signupnametext);
 		
-		signupbirthtext = new JTextField();
-		signupbirthtext.setColumns(10);
-		signupbirthtext.setBounds(138, 164, 116, 21);
-		contentPane.add(signupbirthtext);
-		
 		JLabel signuppwlable = new JLabel("\uC0AC\uC6A9\uD560 \uBE44\uBC00\uBC88\uD638");
 		signuppwlable.setBounds(297, 40, 93, 15);
 		contentPane.add(signuppwlable);
 		
 		JLabel signupemaillable = new JLabel("e-mail\uC8FC\uC18C");
-		signupemaillable.setBounds(297, 167, 93, 15);
+		signupemaillable.setBounds(22, 167, 93, 15);
 		contentPane.add(signupemaillable);
 		
 		signuppwtext = new JTextField();
@@ -115,7 +109,7 @@ public class signupFrame extends JFrame {
 		
 		signupemailtext = new JTextField();
 		signupemailtext.setColumns(10);
-		signupemailtext.setBounds(413, 164, 116, 21);
+		signupemailtext.setBounds(138, 164, 116, 21);
 		contentPane.add(signupemailtext);
 		
 		signupmessagelabel = new JLabel();
@@ -126,17 +120,29 @@ public class signupFrame extends JFrame {
 		JButton siguup_apply = new JButton("È¸¿ø°¡ÀÔÇÏ±â ");
 		siguup_apply.setBounds(420, 226, 109, 23);
 		contentPane.add(siguup_apply);
+		
+		ButtonGroup bg = new ButtonGroup();
+		
+		JRadioButton rMan = new JRadioButton("³²¼º");
+		rMan.setBounds(297, 163, 121, 23);
+		contentPane.add(rMan);
+		bg.add(rMan);
+		
+		JRadioButton rWoman = new JRadioButton("¿©¼º");
+		rWoman.setBounds(420, 163, 121, 23);
+		contentPane.add(rWoman);
+		bg.add(rWoman);
+		
 		siguup_apply.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				signupmessagelabel.setText("");
 				String signupid = signupidtext.getText().trim();
 				String signupphonenum = signupphonetext.getText().trim();
 				String email = signupemailtext.getText().trim();
-				String birthday = signupbirthtext.getText().trim();
 				String signuppw = signuppwtext.getText().trim();
 				String signupname = signupnametext.getText().trim();
 				if(signupid.length() == 0 || signupphonenum.length() == 0 || email.length() == 0 ||
-				   birthday.length() == 0 || signuppw.length() == 0 || signupname.length() == 0) {
+				    signuppw.length() == 0 || signupname.length() == 0) {
 					signupmessagelabel.setText("ºóÄ­ÀÌ ÀÖ½À´Ï´Ù");
 					}
 				else if(signupid.matches(".*[¤¡-¤¾¤¿-¤Ó°¡-ÆR]+.*")) {
@@ -145,14 +151,35 @@ public class signupFrame extends JFrame {
 				else if(email.matches(".*[¤¡-¤¾¤¿-¤Ó°¡-ÆR]+.*")){
 					signupmessagelabel.setText("ÀÌ¸ÞÀÏ Çü½ÄÀÌ ¸ÂÁö ¾Ê½À´Ï´Ù.");
 				}
-				else if(birthday.matches(".*[¤¡-¤¾¤¿-¤Ó°¡-ÆR a-z]+.*")){
-					signupmessagelabel.setText("»ýÀÏ Çü½ÄÀÌ ¸ÂÁö ¾Ê½À´Ï´Ù.");
-				}
 				else if(signupphonenum.matches(".*[¤¡-¤¾¤¿-¤Ó°¡-ÆRa-z]+.*")){
 					signupmessagelabel.setText("ÈÞ´ëÆù¹øÈ£ Çü½ÄÀÌ ¸ÂÁö ¾Ê½À´Ï´Ù.");
 				}
 				
 				else {
+					ManagementDTO mdto = new ManagementDTO();
+		            mdto.setId(signupid);
+		            mdto.setPassword(signuppw);
+		            mdto.setName(signupname);
+		            mdto.setTel(signupphonenum);
+		            mdto.setEmail(email);
+		            if(rMan.isSelected())  
+		                mdto.setGender("male");
+		            else {}
+		            if(rWoman.isSelected()) {
+		            	mdto.setGender("female");
+		            }
+		            else {}
+		            
+		            ManagementDAO mdao = ManagementDAO.getInstance();
+		            int result = mdao.insertMember(mdto);
+
+		            if (result == 1) {
+		                JOptionPane.showMessageDialog(null, "È¸¿øµî·Ï ¿Ï·á");
+		                dispose();
+		            } else {
+		                JOptionPane.showMessageDialog(null, "È¸¿øµ¿·Ï ½ÇÆÐ");
+		                dispose();
+		            }
 					new termpj.LoginFrame();
 					setVisible(false);
 				}

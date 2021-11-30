@@ -42,6 +42,7 @@ public class payFrame extends JFrame {
 	 * Create the frame.
 	 */
 	public payFrame() {
+		setTitle("\uC601\uC218\uC99D");
 		reservedpeople = moviechoiceFrame.tosspeople();
 		reservedadult = moviechoiceFrame.tossadult();
 		inthotdog = snackorderFrame.tosshotdog();

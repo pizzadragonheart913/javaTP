@@ -3,6 +3,9 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
+import dao.DataBase;
+import dao.ManagementDAO;
+
 
 public class LoginFrame extends JFrame{
 	Font f;
@@ -67,22 +70,26 @@ public class LoginFrame extends JFrame{
 				String id = tf1.getText().trim();
 				@SuppressWarnings("deprecation")
 				String secret_word = pw1.getText().trim();
-				//System.out.print(tf1.getText());
-				//System.out.print(new String(secret_word));
+				ManagementDAO mdao = ManagementDAO.getInstance();
+				int result = mdao.idPassword(id, secret_word);
+				
 				if(id.length()==0 || secret_word.length()==0) {
 					lb1.setText("¾ÆÀÌµð³ª ÆÐ½º¿öµå¸¦ ÀÔ·ÂÇÏÁö ¾Ê¾Ò½À´Ï´Ù.");
 				}
-				if(id.matches(".*[¤¡-¤¾¤¿-¤Ó°¡-ÆR]+.*")) {
+				else if(id.matches(".*[¤¡-¤¾¤¿-¤Ó°¡-ÆR]+.*")) {
 					lb1.setText("¾ÆÀÌµð ¹× ºñ¹Ð¹øÈ£´Â ¿µ¹®ÀÚ¿Í ¼ýÀÚ·Î ±¸¼ºµË´Ï´Ù");
 				}
-				if(id.equals("park") && secret_word.equals("123")) {
+				else if(result == 1) {
 					new termpj.moviechoiceFrame();
 					setVisible(false);
-						}
-						
-					}
-             }  
-          ); 
+				}
+				else if(result != 1){
+					JOptionPane.showMessageDialog(null, "·Î±×ÀÎ ½ÇÆÐ");
+				}
+				else {}
+			}
+        }); 
+		DataBase.createTable();
 		setSize(320,320);
 		setVisible(true);
 	}
